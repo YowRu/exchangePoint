@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/jquery.dataTables.min.js"></script> 
+<script src="js/bootstrap-sweetalert-master/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" href="css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" href="js/bootstrap-sweetalert-master/dist/sweetalert.css" type="text/css">
+  <link rel="stylesheet" href="css/layout.css" type="text/css">
+   <link rel="stylesheet" href="css/pointsinf.css" type="text/css">
+    <title>點數資訊</title>
+</head>
+<body>
+    <header>
+       <div class="wp">
+            <div class="row1">
+                <h1><a href="pointsinf.html">CISCO</a></h1>
+                <div class="r">
+                    <a>The activity of coupon collecting</a>
+                    <a href="index.html" >登出</a>
+                </div>
+            </div>
+        </div>
+        <div class="row2">
+            <div class="nav">
+                <a class="disabled account">帳戶</a>
+                <a class="disabled exchange">兌換</a>
+                <a class="disabled record">紀錄</a>
+                <a class="disabled transfer">移轉</a>
+                <a href="upload.html">匯入</a>
+            </div>
+        </div>
+    </header>
+    <div id="main">
+       <div class="wp">
+           <div class="table">
+                <table id="example" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Office</th>
+                            <th>Extn.</th>
+                            <th>Start date</th>
+                            <th>Salary</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Office</th>
+                            <th>Extn.</th>
+                            <th>Start date</th>
+                            <th>Salary</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+           <div class="list">
+               <form action=" " method="POST" id="list">
+                    <span class="close">X</span>
+                    <div class="content">
+                        <div class="up">
+                            <div class="right"></div>
+                        </div>
+                    </div>
+                    <input type="submit" name="submitExchange" value="確認兌換"/>
+               </form>
+           </div>
+           <div class="list2">
+               <form action=" " method="POST" id="list2">
+                    <span class="close">X</span>
+                    <div class="content">
+                        <div class="up">
+                            <div class="right"></div>
+                        </div>
+                    </div>
+               </form>
+           </div>
+           <div class="list3">
+               <form action=" " method="POST" id="list3">
+                    <span class="close">X</span>
+                    <div class="content">
+                        <div class="up">
+                            <div class="right"></div>
+                        </div>
+                        <p>test</p>
+                    </div>
+                    <input type="submit" name="submitTransfer" value="確認移轉"/>
+               </form>
+           </div>
+           <div class="list4">
+               <form action=" " method="POST" id="list4">
+                    <span class="close">X</span>
+                    <div class="content">
+                        <div class="up">
+                            <div class="right"></div>
+                        </div>
+                    </div>
+                    <input type="submit" name="submitAccount" value="確認修改"/>
+               </form>
+           </div>
+        </div>
+    </div>
+<script>
+$(document).ready(function() {
+let $W=$(window).width();
+let $H=$(window).height();
+    
+$('#example').DataTable( {
+    "ajax": "ajax/data/objects.txt"
+});
+    
+//pop    
+    $('#main .list').height($H);
+    $('#main .list2').height($H);
+    $('#main .list3').height($H);
+    $('#main .list4').height($H);
+
+//一開始設定無法作用
+    $(".nav a.disabled").click(function(event){
+           event.returnValue=false;
+      });
+//抓到某列的資料
+var table = $('#example').DataTable();
+$('#example tbody').on('click', 'tr', function(){
+    //click bg-color change 
+    $(this).siblings('tr').removeClass('change_bg');
+    $(this).addClass('change_bg');
+    
+    var data = $(this).find('td').eq(0).text() + ',' + $(this).find('td').eq(1).text();
+    console.log(data);
+    let name=$(this).find('td').eq(0).text();
+    let points=$(this).find('td').eq(1).text();
+    let company=$(this).find('td').eq(2).text();
+    let input=$(this).find('td').eq(3).text();
+    let code=$(this).find('td').eq(4).text();
+    let nameC=$(this).find('td').eq(5).text();
+//選取後nav a作用
+   $("header .nav a.disabled").css({'cursor':'pointer','pointer-events':'auto','color':'#666'});
+//兌換
+   $('header .nav a.disabled.exchange').click(function(){  
+     //list show   
+        $('.list').css({'display':'flex'});
+    //取資料
+         //取資料
+        $('#list .up .right').text('');
+        $('#list .up .right').append('<p class="info s code">'+code+'<p>');
+        $('#list .up .right').append('<p class="info bigChange">'+nameC+'</p>');
+        $('#list .up .right').append('<p class="info bigChange english">'+name+'</p>'); 
+        $('#list .up .right').append('<p class="info l">'+points+'<span>點</span><p>');
+        $('#list .up .right').append('<p class="info s ed">1000元禮券<input class="info smallChange" value="'+points+'" required/>張<p>');
+        $('#list .up .right').append('<p class="info s email ">請輸入禮券欲兌換張數</p>');
+       $('#list .up .right').append('<p class="info s flex smallChange">簡稱<span>'+input+'</span></p>');
+        $('#list .up .right').append('<p class="info s flex smallChange">簡稱<span>'+input+'</span></p>');
+        $('#list .up .right').append('<p class="info s flex smallChange">email<span>'+company+'</span><p>');
+       //$("#list select")[0].selectedIndex = 0;    
+    //選取option
+        $('input[name="points"]').change(function(){
+               let $selected=$('#list input[name="points"]:checked').val(),//選到的點數
+                   $optionT =$('#list input[name="points"]:checked').text(),
+                   $editor= (points - $selected);
+              //alert('選到的點數'+$selected+'/目前點數'+points);
+                $('.submitbtn').prop('disabled', false);
+                if($editor < 0){
+                    $('.submitbtn').css({'cursor':'pointer','opacity':0.4});
+                    $('.submitbtn').click(function(){
+                        $('.submitbtn').prop('disabled', true);
+                        swal({title:'點數不足,無法兌換',type: "warning"});
+                    });
+               }
+            else if($editor > 0){
+                   //alert('目前'+points+'- 選取'+$selected+'=剩下點數'+$editor);//傳回後端
+                   $('.submitbtn').css({'cursor':'pointer','opacity':1});
+                   $('.submitbtn').click(function(){
+                       $('.submitbtn').prop('disabled', true);
+                       swal({title:'剩下點數'+$editor,type: "success"});
+                       setTimeout(function(){
+                            $('.submitbtn').prop('disabled', false);
+                            $('#list').submit();
+                       },1000);
+                   });
+                }else if($editor == 0){
+                   $('.submitbtn').css({'cursor':'pointer','opacity':1});
+                   $('.submitbtn').click(function(){
+                       swal({title:'剩下點數'+$editor,type: "success"});
+                        $('.submitbtn').prop('disabled', true);
+                       setTimeout(function(){
+                            $('.submitbtn').prop('disabled', false);
+                            $('#list').submit();
+                       },1000);
+                  });
+                }
+      });
+       //list submit
+       
+    //關閉兌換list 
+     $('.close').click(function(){
+         $('.list').hide();
+         $('#list .up .right').text('');
+     });
+       
+    });//兌換end
+    
+//紀錄
+   $('header .nav a.disabled.record').click(function(){
+       //list show   
+        $('#main .list2').css({'display':'flex'});
+       
+    //取資料
+        $('#list2 .up .right').text('');
+        $('#list2 .up .right').append('<table id="record" class="display" style="width:100%"><thead><tr><th>日期</th><th>狀態</th><th>出貨資訊</th><th>兌換細項</th><th>使用點數</th></tr></thead></table>');
+       $('#record').DataTable( {
+    "ajax": "ajax/data/objects1.txt"
+});
+    //關閉兌換list 
+         $('.close').click(function(){
+             $('.list2').hide();
+             $('#list2 .up .right').text('');
+         });
+   });//紀錄end
+
+//移轉   
+  $('header .nav a.disabled.transfer').click(function(){
+    //list show   
+        $('#main .list3').css({'display':'flex'});
+    //取資料
+        $('#list3 .up .right').text('');
+        $('#list3 .up .right').append('<p class="info m">'+name+'<p>'); 
+        $('#list3 .up .right').append('<p class="info s">公司代號'+company+'<p>');
+        $('#list3 .up .right').append('<p class="info l">'+points+'<span>點</span><p>');
+    //關閉兌換list 
+         $('.close').click(function(){
+             $('.list3').hide();
+             $('#list3 .up .right').text('');
+         });
+  });//移轉end
+    
+//帳戶資訊
+ $('header .nav a.disabled.account').click(function(){
+     //list show   
+        $('.list4').css({'display':'flex'});
+     //取資料
+        $('#list4 .up .right').text('');
+        $('#list4 .up .right').append('<p class="info s code">'+code+'<p>');
+        $('#list4 .up .right').append('<p class="info m ed"><input class="info bigChange" value="'+nameC+'" required/></p>');
+        $('#list4 .up .right').append('<p class="info m ed"><input class="info bigChange english" value="'+name+'" required/></p>'); 
+        $('#list4 .up .right').append('<p class="info l">'+points+'<span>點</span><p>');
+        $('#list4 .up .right').append('<p class="info s email">公司代號'+company+'<p>');
+        $('#list4 .up .right').append('<p class="info s flex ed"><input class="info smallChange" value="'+input+'" required/></p>');
+        $('#list4 .up .right').append('<p class="info s flex ed"><input class="info smallChange" value="'+input+'" required/></p>');
+
+     //關閉兌換list 
+         $('.close').click(function(){
+             $('.list4').hide();
+             $('#list4 .up .right').text('');
+         });
+     //送出
+        $('.submitbtn').prop('disabled', false);
+ });    
+ });//按下某列end
+
+
+    
+});
+    
+</script>
+</body>
+</html>

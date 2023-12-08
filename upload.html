@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="js/jquery.dataTables.min.js"></script> 
+<script src="js/bootstrap-sweetalert-master/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" href="js/bootstrap-sweetalert-master/dist/sweetalert.css" type="text/css">
+  <link rel="stylesheet" href="css/layout.css" type="text/css">
+   <link rel="stylesheet" href="css/upload.css" type="text/css">
+    <title>匯入</title>
+</head>
+<body>
+    <header>
+           <div class="wp">
+                <div class="row1">
+                    <h1><a href="pointsinf.html">CISCO</a></h1>
+                    <div class="r">
+                        <a>The activity of coupon collecting</a>
+                        <a href="index.html" >登出</a>
+                    </div>
+                </div>
+            </div>
+    </header>
+    <div id="main">
+        <div class="wp">
+            <div class="upload">
+               <ul class="tabs">
+                  <li><a href="#tab1">帳戶匯入</a></li>
+                  <li><a href="#tab2">點數匯入</a></li>
+                </ul>
+                <ul class="tab_container">
+                  <li id="tab1" class="tab_content">
+                       <lable class="upload_text"></lable>
+                        <label class="upload_lable">
+                            檔案拖拉至此<br>或點此上傳檔案
+                            <input id="upload_input" type="file" >
+                        </label>
+                        <div class="ps">檔案類型 EXCEL/ 大小限制 4M</div>
+                        <input type="submit" name="fileUP" class="uploadbtn fileUP" value="帳戶匯入"/>
+                  </li>
+                  <li id="tab2" class="tab_content">
+                        <lable class="upload_text2"></lable>
+                        <label class="upload_lable">
+                            檔案拖拉至此<br>或點此上傳檔案
+                            <input id="upload_input2" type="file" >
+                        </label>
+                        <div class="ps">檔案類型 EXCEL/ 大小限制 4M</div>
+                        <input type="submit" name="pointsUP" class="uploadbtn pointsUP" value="點數匯入"/>
+                  </li>
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+<script>
+$(document).ready(function() {
+let $W=$(window).width();
+let $H=$(window).height();
+$('#main .wp').height($H);
+    $(function(){
+		// 預設顯示第一個 Tab
+		var _showTab = 0;
+		$('.upload').each(function(){
+			// 目前的頁籤區塊
+			var $tab = $(this);
+
+			var $defaultLi = $('.tabs li', $tab).eq(_showTab).addClass('active');
+			$($defaultLi.find('a').attr('href')).siblings().hide();
+			
+			// 當 li 頁籤被點擊時...
+			// 若要改成滑鼠移到 li 頁籤就切換時, 把 click 改成 mouseover
+			$('.tabs li', $tab).click(function() {
+				// 找出 li 中的超連結 href(#id)
+				var $this = $(this),
+					_clickTab = $this.find('a').attr('href');
+				// 把目前點擊到的 li 頁籤加上 .active
+				// 並把兄弟元素中有 .active 的都移除 class
+				$this.addClass('active').siblings('.active').removeClass('active');
+				// 淡入相對應的內容並隱藏兄弟元素
+				$(_clickTab).stop(false, true).fadeIn().siblings().hide();
+
+				return false;
+			}).find('a').focus(function(){
+				this.blur();
+			});
+		});
+	});
+
+    //show text
+    $('#upload_input').change(function() {
+      var file = $('#upload_input')[0].files[0].name;
+      $('.upload_text').text(file);
+    });
+    //show text
+    $('#upload_input2').change(function() {
+      var file = $('#upload_input2')[0].files[0].name;
+      $('.upload_text2').text(file);
+    }); 
+    
+});
+</script>
+</body>
+</html>

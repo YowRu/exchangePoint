@@ -1,0 +1,12 @@
+header{width:100%;background-color:#5dbfc7;}
+    header .wp{max-width:1000px;width:100%;margin:0 auto;display: flex;justify-content:center;align-items:center;padding: 50px 0 ;}
+    header .border{border:2px solid #fff;width:250px;margin:0 auto;text-align: center;} 
+    header .border a{color: #fff;font-size: 2rem;display: block;padding:30px 50px;}
+    .table{max-width:1600px;width:100%;margin:50px auto;}
+    td.details-control {
+    background: url('../resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../resources/details_close.png') no-repeat center center;
+}

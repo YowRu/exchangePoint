@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="js/loading.js"></script>
+<script src="js/jquery.dataTables.min.js"></script> 
+<script src="js/jquery.bpopup.min.js"></script>
+<script src="js/bootstrap-sweetalert-master/dist/sweetalert.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" href="js/bootstrap-sweetalert-master/dist/sweetalert.css" type="text/css">
+   <link rel="stylesheet" href="css/layout.css" type="text/css">
+    <title>點數資訊</title>
+</head>
+<style>
+.table{max-width:1000px;width:100%;margin:0 auto;}
+table td{cursor: pointer;}
+.disabled {pointer-events:none;cursor:default;}
+#example_length,#example_filter{height: 40px;}
+#example_length label{display: flex;align-items: center;color:#5d9ac7;}
+#example_length select{margin:0 5px;}
+tfoot{display: none;}
+table.dataTable.display tbody tr.odd>.sorting_1:active,
+table.dataTable.order-column.stripe tbody tr>.sorting_1:active {background-color: #A2D3F6;}
+.popup {width:100%;position:fixed;top:0;left:0;
+display:flex;justify-content: center;align-items: center;
+background-color:rgba(255, 255, 255, 0.6);z-index:3;display: none;}
+.list{position:fixed;left:0;top:0;width:100%;z-index:4;
+    justify-content:center;align-items:center;display:none;}
+#list{
+box-shadow:1px 1px 5px 1px #ccc;width:350px;margin:0 auto;border-radius:20px;position:relative;
+background-image: -webkit-gradient(linear, left bottom, right top, from(#A2D3F6), to(#72d3c4));
+background-image: -webkit-linear-gradient(40deg, #A2D3F6, #72d3c4);
+background-image: -moz-linear-gradient(40deg, #A2D3F6, #72d3c4);
+background-image: -o-linear-gradient(40deg, #A2D3F6, #72d3c4);
+background-image: -ms-linear-gradient(40deg, #A2D3F6, #72d3c4);
+background-image: linear-gradient(40deg, #A2D3F6, #72d3c4);
+    }
+    
+.title{height:120px;line-height:120px;background-color:#eee;color:#999;
+border-top-left-radius:20px;border-top-right-radius:20px;text-align: center;font-size: 1.8rem;}
+form .icon{width:50px;height:50px;margin:-20px auto;border-radius:50%;background-color:#fff;}
+form .icon img{border-radius:50%;width:100%;border:2px solid #fff;box-sizing:border-box;}   
+.content{padding: 50px 20px;height:200px;}
+.content .up{display:flex;justify-content:center;}
+.content p{margin-right:20px;line-height:2rem;}
+form select{display:block;width:170px;margin:10px auto;font-size:2rem;}
+input[type="submit"]{display:block;border-radius:10px;background-color: #fff;
+color: #5dbfc7;font-size:1rem;font-weight:400;width:150px;height:50px;line-height:50px;
+margin:20px auto;border:0;box-shadow:1px 1px 2px 1px #eee;}
+.close{font-size:1.4rem;font-weight:400;border-radius:50%;background-color: #eee;
+    position: absolute;right: 10px;top:10px;cursor:pointer;}
+    
+    
+</style>
+<body>
+    <header></header>
+    <div id="main">
+       <div class="wp">
+           <div class="navwp"></div>
+           <div class="table">
+                <table id="example" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Office</th>
+                            <th>Extn.</th>
+                            <th>Start date</th>
+                            <th>Salary</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Office</th>
+                            <th>Extn.</th>
+                            <th>Start date</th>
+                            <th>Salary</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+           <div class="list">
+               <form action=" " method="POST" id="list">
+                <span class="close">X</span>
+                <div class="title">點數兌換</div>
+                <div class="icon"><img src="img/popup/circular-gift.png" alt=""></div>
+                <div class="content">
+                    <div class="up">
+                        <div class="left">
+                            <p>姓名：</p>
+                            <p>點數：</p>
+                        </div>
+                        <div class="right"></div>
+                    </div>
+                    <select>
+                        <option value="0">請選擇</option>
+                        <option value="5">禮券1-5點</option>
+                        <option value="10">禮券2-10點</option>
+                        <option value="15">禮券3-15點</option>
+                        <option value="20">禮券4-20點</option>
+                    </select>
+                </div>
+                <input type="submit" name="submitbtn" class="submitbtn" value="確認兌換"/>
+           </form>
+           </div>
+           <form action=" " method="POST" id="recode">
+                <div class="title">點數紀錄</div>
+                <div class="icon"><img src="img/popup/list.png" alt=""></div>
+                <div class="content">
+                    <div class="info"></div>
+                </div>
+                <input type="submit" name="submitbtn" class="btn" value="確認兌換"/>
+           </form>
+        </div>
+    </div>
+<script>
+$(document).ready(function() {
+let $W=$(window).width();
+let $H=$(window).height();
+var $h= $('.list').height();
+var $t= ($H-$h)/2;
+$('.list').css({'top':$t});
+
+$('#example').DataTable( {
+    "ajax": "ajax/data/objects.txt"
+});
+    
+//一開始設定無法作用
+    $(".nav a.disabled").click(function(event){
+           event.returnValue=false;
+      });
+//抓到某列的資料
+var table = $('#example').DataTable();
+$('#example tbody').on('click', 'tr', function(){
+    
+    var data = $(this).find('td').eq(0).text() + ',' + $(this).find('td').eq(1).text();
+    console.log(data);
+    let name=$(this).find('td').eq(0).text();
+    let points=$(this).find('td').eq(1).text();
+    let company=$(this).find('td').eq(2).text();
+//選取後nav a作用
+   $(".disabled").css({'cursor':'pointer','pointer-events':'auto'});
+//兌換
+   $('.disabled.exchange').click(function(){  
+     //list show   
+        $('.list').css({'display':'flex'});
+    //取資料
+        $('#list .up .right').text('');
+        $('#list .up .right').append('<p class="info m">'+name+'<p>'); 
+        $('#list .up .right').append('<p class="info s">公司代號'+company+'<p>');
+        $('#list .up .right').append('<p class="info l">'+points+'<p>');
+       //$("#list select")[0].selectedIndex = 0;
+       
+    //選取option
+        $('#list select').change(function(){
+               let $selected=$('#list select option:selected').val(),//選到的點數
+                   $optionT=$('#list select option:selected').text(),
+                   $editor= (points - $selected);
+               // alert('選到的點數'+$selected+'/目前點數'+points);
+                if($editor < 0){
+                    $('.submitbtn').prop('disabled', false);
+                    $('.submitbtn').click(function(){
+                        swal({title:'點數不足,無法兌換',type: "warning"});
+                        $('.submitbtn').prop('disabled', true);
+                    });
+               }else if($editor > 0){
+                    //alert('目前'+points+'- 選取'+$selected+'=剩下點數'+$editor);//傳回後端
+                   $('.submitbtn').click(function(){
+                       swal({title:'剩下點數'+$editor,type: "success"});
+                        $('.submitbtn').prop('disabled', true);
+                       setTimeout(function(){
+                            $('.submitbtn').prop('disabled', false);
+                            $('#list').submit();
+                       },1000);
+                   });
+                }else if($editor == 0){
+                   $('.submitbtn').click(function(){
+                       swal({title:'剩下點數'+$editor,type: "success"});
+                        $('.submitbtn').prop('disabled', true);
+                       setTimeout(function(){
+                            $('.submitbtn').prop('disabled', false);
+                            $('#list').submit();
+                       },1000);
+                  });
+                }
+      });
+       //list submit
+       
+    //關閉兌換list 
+     $('.close').click(function(){
+         $('.list').hide();
+         $("#list select")[0].selectedIndex = 0;
+         $('#list .up .right').text('');
+     });
+       
+    });//兌換end
+ });//按下某列end
+    
+});
+    
+</script>
+</body>
+</html>

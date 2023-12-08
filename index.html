@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/loading.js"></script>
+    <link rel="stylesheet" href="css/index.css" type="text/css">
+    <title>登入</title>
+</head>
+<body>
+    <div id="main">
+        <div class="login">
+            <h2>Welcome!</h2>
+            <div class="content">              
+               <form id="loginForm" name="loginForm" method="POST" action=" ">
+                    <div class="detail"> 
+                        <img src="img/login/id.png" alt="">           
+                        <input type="text" name="id" id="id" placeholder="請輸入帳號" required />
+                    </div>
+                    <div class="detail"> 
+                        <img src="img/login/key.png" alt="">         
+                        <input type="password" name="pwd" id="pwd" placeholder="密碼6個英數字元" required />
+                    </div>
+                    <div class="detail"> 
+                        <img src="img/login/email.png" alt="">           
+                        <input type="text" name="email" id="email" placeholder="請輸入email" required />
+                    </div>
+                    <input type="hidden" name="checkoutPage" id="checkoutPage" value="1" />
+                    <input type="submit" value="確認登入" >
+               </form>
+             </div>
+         </div>
+         <div class="img">
+             <div class="inf">
+                 <h1>CISCO</h1>
+                 <p>The activity of coupon collecting</p>
+             </div>
+         </div>
+    </div>
+<script>
+$(document).ready(function(){
+let $H=$(window).height();
+$('body').height($H);
+});    
+</script>
+</body>
+</html>
